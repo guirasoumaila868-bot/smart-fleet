@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="group_smart_fleet_user" model="res.groups">
+        <field name="name">SMART Fleet / Utilisateur</field>
+    </record>
+    
+    <record id="group_smart_fleet_manager" model="res.groups">
+        <field name="name">SMART Fleet / Responsable</field>
+        <field name="implied_ids"
+               eval="[(4, ref('smart_fleet_base.group_smart_fleet_user'))]"/>
+    </record>
+
+</odoo>

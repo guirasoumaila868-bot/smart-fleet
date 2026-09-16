@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="fleet_vehicle_view_form_smart" model="ir.ui.view">
+        <field name="name">fleet.vehicle.form.smart.fleet</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+
+            <field name="category_id" position="after">
+                <field name="smart_categorie"/>
+                <field name="smart_nombre_essieux"/>
+                <field name="smart_ptac"/>
+                <field name="smart_ptra"/>
+                <field name="smart_date_mise_service"/>
+                <field name="smart_etat_service"/>
+            </field>
+
+        </field>
+    </record>
+
+</odoo>
