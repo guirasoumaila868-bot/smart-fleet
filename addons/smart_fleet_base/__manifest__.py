@@ -20,6 +20,10 @@
         'views/smart_fleet_menus.xml',
     ],
 
+    'demo': [
+        'demo/fleet_vehicle_demo.xml',
+    ],
+
     'application': True,
     'installable': True,
 }

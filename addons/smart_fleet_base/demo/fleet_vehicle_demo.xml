@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Marques de véhicules -->
+    <record id="brand_sinotruk" model="fleet.vehicle.model.brand">
+        <field name="name">Sinotruk</field>
+    </record>
+
+    <record id="brand_remorques_sahel" model="fleet.vehicle.model.brand">
+        <field name="name">Remorques Sahel</field>
+    </record>
+
+
+    <!-- Modèles de véhicules -->
+    <record id="model_howo_tx_6x4" model="fleet.vehicle.model">
+        <field name="name">HOWO TX 6x4</field>
+        <field name="brand_id" ref="brand_sinotruk"/>
+    </record>
+
+    <record id="model_howo_porteur_8x4" model="fleet.vehicle.model">
+        <field name="name">HOWO porteur 8x4</field>
+        <field name="brand_id" ref="brand_sinotruk"/>
+    </record>
+
+    <record id="model_semi_remorque_plateau_3_essieux" model="fleet.vehicle.model">
+        <field name="name">Semi-remorque plateau 3 essieux</field>
+        <field name="brand_id" ref="brand_remorques_sahel"/>
+    </record>
+
+
+    <!-- Véhicule : Tracteur 1 -->
+    <record id="vehicle_tracteur_1" model="fleet.vehicle">
+        <field name="license_plate">11 JM 4521</field>
+        <field name="model_id" ref="model_howo_tx_6x4"/>
+        <field name="smart_categorie">tracteur</field>
+        <field name="smart_nombre_essieux">3</field>
+        <field name="smart_ptac">25000</field>
+        <field name="smart_ptra">70000</field>
+    </record>
+
+
+    <!-- Véhicule : Tracteur 2 -->
+    <record id="vehicle_tracteur_2" model="fleet.vehicle">
+        <field name="license_plate">11 KP 0873</field>
+        <field name="model_id" ref="model_howo_tx_6x4"/>
+        <field name="smart_categorie">tracteur</field>
+        <field name="smart_nombre_essieux">3</field>
+        <field name="smart_ptac">25000</field>
+        <field name="smart_ptra">70000</field>
+    </record>
+
+
+    <!-- Véhicule : Porteur 1 -->
+    <record id="vehicle_porteur_1" model="fleet.vehicle">
+        <field name="license_plate">11 HL 2290</field>
+        <field name="model_id" ref="model_howo_porteur_8x4"/>
+        <field name="smart_categorie">porteur</field>
+        <field name="smart_nombre_essieux">4</field>
+        <field name="smart_ptac">32000</field>
+        <field name="smart_ptra">44000</field>
+    </record>
+
+
+    <!-- Véhicule : Remorque 1 -->
+    <record id="vehicle_remorque_1" model="fleet.vehicle">
+        <field name="license_plate">11 RM 1104</field>
+        <field name="model_id" ref="model_semi_remorque_plateau_3_essieux"/>
+        <field name="smart_categorie">remorque</field>
+        <field name="smart_nombre_essieux">3</field>
+        <field name="smart_ptac">39000</field>
+    </record>
+
+
+    <!-- Véhicule : Remorque 2 -->
+    <record id="vehicle_remorque_2" model="fleet.vehicle">
+        <field name="license_plate">11 RM 1187</field>
+        <field name="model_id" ref="model_semi_remorque_plateau_3_essieux"/>
+        <field name="smart_categorie">remorque</field>
+        <field name="smart_nombre_essieux">3</field>
+        <field name="smart_ptac">39000</field>
+    </record>
+
+        <!-- Attelage de démonstration -->
+    <record id="coupling_demo_1" model="smart.fleet.coupling">
+        <field name="tracteur_id" ref="vehicle_tracteur_1"/>
+        <field name="remorque_id" ref="vehicle_remorque_1"/>
+        <field name="date_debut" eval="(DateTime.today() - relativedelta(days=12)).strftime('%Y-%m-%d')"/>
+        <field name="en_cours">True</field>
+    </record>
+
+</odoo>
