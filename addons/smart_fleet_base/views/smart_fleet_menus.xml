@@ -5,7 +5,7 @@
     <menuitem
         id="menu_smart_fleet_root"
         name="SMART Fleet"
-        sequence="10"/>
+        web_icon="smart_fleet_base,static/description/icon.png"/>
 
 
     <!-- 2. MENU PARENT : Véhicules -->
