@@ -17,8 +17,8 @@ class EstatePropertyOffer(models.Model):
 
     status = fields.Selection(
         selection=[
-            ("accepted", "Accepted"),
-            ("refused", "Refused"),
+            ('accepted', 'Accepted'),
+            ('refused', 'Refused'),
         ],
         copy=False,
     )
@@ -71,30 +71,33 @@ class EstatePropertyOffer(models.Model):
                     "The offer price must be greater than 0."
                 )
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        for vals in vals_list:
-            property_record = self.env["estate.property"].browse(
-                vals["property_id"]
+    @api.model
+    def create(self, vals):
+        property_record = self.env["estate.property"].browse(
+            vals["property_id"]
+        )
+
+        if property_record.offer_ids:
+            max_offer = max(
+                property_record.offer_ids.mapped("price")
             )
 
-            if property_record.state == "sold":
+            if vals["price"] <= max_offer:
                 raise ValidationError(
-                    "Impossible de créer une offre pour une propriété vendue."
+                    "The offer must be higher than existing offers."
                 )
 
-        return super().create(vals_list)
+        property_record.state = "offer_received"
+
+        return super().create(vals)
 
     def action_accept(self):
         for offer in self:
-            other_accepted = self.search(
-                [
-                    ("property_id", "=", offer.property_id.id),
-                    ("status", "=", "accepted"),
-                    ("id", "!=", offer.id),
-                ],
-                limit=1,
-            )
+            other_accepted = self.search([
+                ("property_id", "=", offer.property_id.id),
+                ("status", "=", "accepted"),
+                ("id", "!=", offer.id),
+            ], limit=1)
 
             if other_accepted:
                 raise UserError(

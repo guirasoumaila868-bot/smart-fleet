@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    
-    <record id="group_smart_fleet_user" model="res.groups">
-        <field name="name">SMART Fleet / Utilisateur</field>
+
+    <!-- Privilège SMART Fleet -->
+    <record id="smart_fleet_privilege" model="res.groups.privilege">
+        <field name="name">SMART Fleet</field>
+        <field name="sequence">20</field>
+        <field name="category_id" ref="base.module_category_services"/>
     </record>
-    
+
+    <!-- Groupe Utilisateur -->
+    <record id="group_smart_fleet_user" model="res.groups">
+        <field name="name">Utilisateur</field>
+        <field name="privilege_id" ref="smart_fleet_privilege"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Groupe Responsable -->
     <record id="group_smart_fleet_manager" model="res.groups">
-        <field name="name">SMART Fleet / Responsable</field>
-        <field name="implied_ids"
-               eval="[(4, ref('smart_fleet_base.group_smart_fleet_user'))]"/>
+        <field name="name">Responsable</field>
+        <field name="privilege_id" ref="smart_fleet_privilege"/>
+        <field name="implied_ids" eval="[(4, ref('group_smart_fleet_user'))]"/>
     </record>
 
 </odoo>

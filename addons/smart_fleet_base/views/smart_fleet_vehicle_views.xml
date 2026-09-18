@@ -1,22 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="fleet_vehicle_view_form_smart" model="ir.ui.view">
-        <field name="name">fleet.vehicle.form.smart.fleet</field>
+    <!-- 1. VUE FORMULAIRE HÉRITÉE -->
+    <record id="view_smart_fleet_vehicle_form" model="ir.ui.view">
+        <field name="name">fleet.vehicle.form.smart_fleet_base</field>
         <field name="model">fleet.vehicle</field>
         <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
         <field name="arch" type="xml">
 
-            <field name="category_id" position="after">
-                <field name="smart_categorie"/>
-                <field name="smart_nombre_essieux"/>
-                <field name="smart_ptac"/>
-                <field name="smart_ptra"/>
-                <field name="smart_date_mise_service"/>
-                <field name="smart_etat_service"/>
-            </field>
+            <!-- Informations Poids Lourds -->
+            <xpath expr="//sheet" position="inside">
+                <group string="Informations Poids Lourds (Smart Fleet)">
+                    <group>
+                        <field name="smart_categorie"/>
+                        <field name="smart_nombre_essieux"/>
+                        <field name="smart_date_mise_service"/>
+                    </group>
+
+                    <group>
+                        <field name="smart_ptac"/>
+                        <field name="smart_ptra"/>
+                        <field name="smart_etat_service"/>
+                    </group>
+                </group>
+            </xpath>
+
+
+            <!-- C4-C5 : Onglet Attelages -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Attelages">
+
+                    <!-- Attelages comme tracteur / porteur -->
+                    <group string="Comme tracteur / porteur">
+                        <field name="smart_attelage_tracteur_ids">
+                            <list>
+                                <field name="remorque_id"/>
+                                <field name="date_debut"/>
+                                <field name="date_fin"/>
+                                <field name="en_cours"/>
+                                <field name="motif_detelage"/>
+                            </list>
+                        </field>
+                    </group>
+
+
+                    <!-- Attelages comme remorque -->
+                    <group string="Comme remorque">
+                        <field name="smart_attelage_remorque_ids">
+                            <list>
+                                <field name="tracteur_id"/>
+                                <field name="date_debut"/>
+                                <field name="date_fin"/>
+                                <field name="en_cours"/>
+                                <field name="motif_detelage"/>
+                            </list>
+                        </field>
+                    </group>
+
+                </page>
+            </xpath>
 
         </field>
+    </record>
+
+
+    <!-- 2. VUE LISTE -->
+    <record id="view_smart_fleet_vehicle_list" model="ir.ui.view">
+        <field name="name">fleet.vehicle.list.smart_fleet_base</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="arch" type="xml">
+
+            <list string="Véhicules">
+                <field name="name" string="Immatriculation / Nom"/>
+                <field name="model_id"/>
+                <field name="driver_id"/>
+                <field name="smart_categorie"/>
+                <field name="smart_etat_service"/>
+            </list>
+
+        </field>
+    </record>
+
+
+    <!-- 3. VUE RECHERCHE / FILTRES -->
+    <record id="view_smart_fleet_vehicle_search" model="ir.ui.view">
+        <field name="name">fleet.vehicle.search.smart_fleet_base</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="arch" type="xml">
+
+            <search string="Rechercher un véhicule">
+                <field name="name" string="Immatriculation"/>
+                <field name="smart_categorie"/>
+
+                <separator/>
+
+                <filter
+                    string="Tracteurs"
+                    name="filter_tracteur"
+                    domain="[('smart_categorie', '=', 'tracteur')]"/>
+
+                <filter
+                    string="Porteurs"
+                    name="filter_porteur"
+                    domain="[('smart_categorie', '=', 'porteur')]"/>
+
+                <filter
+                    string="Remorques"
+                    name="filter_remorque"
+                    domain="[('smart_categorie', '=', 'remorque')]"/>
+
+            </search>
+
+        </field>
+    </record>
+
+
+    <!-- 4. ACTIONS (Fenêtres) -->
+
+    <!-- Action globale : Tous les véhicules -->
+    <record id="action_smart_fleet_vehicle" model="ir.actions.act_window">
+        <field name="name">Tous les véhicules</field>
+        <field name="res_model">fleet.vehicle</field>
+        <field name="view_mode">list,kanban,form</field>
+    </record>
+
+
+    <!-- Action spécifique : Tracteurs -->
+    <record id="action_vehicle_tracteur" model="ir.actions.act_window">
+        <field name="name">Tracteurs</field>
+        <field name="res_model">fleet.vehicle</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('smart_categorie', '=', 'tracteur')]</field>
+        <field name="context">{'default_smart_categorie': 'tracteur'}</field>
+    </record>
+
+
+    <!-- Action spécifique : Porteurs -->
+    <record id="action_vehicle_porteur" model="ir.actions.act_window">
+        <field name="name">Porteurs</field>
+        <field name="res_model">fleet.vehicle</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('smart_categorie', '=', 'porteur')]</field>
+        <field name="context">{'default_smart_categorie': 'porteur'}</field>
+    </record>
+
+
+    <!-- Action spécifique : Remorques -->
+    <record id="action_vehicle_remorque" model="ir.actions.act_window">
+        <field name="name">Remorques</field>
+        <field name="res_model">fleet.vehicle</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('smart_categorie', '=', 'remorque')]</field>
+        <field name="context">{'default_smart_categorie': 'remorque'}</field>
     </record>
 
 </odoo>

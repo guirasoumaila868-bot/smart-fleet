@@ -31,10 +31,7 @@ class EstateProperty(models.Model):
 
     date_availability = fields.Date(
         copy=False,
-        default=lambda self: fields.Date.add(
-            fields.Date.today(),
-            months=3
-        ),
+        default=lambda self: fields.Date.add(fields.Date.today(), months=3),
     )
 
     expected_price = fields.Float(required=True)
@@ -58,28 +55,17 @@ class EstateProperty(models.Model):
     ])
 
     active = fields.Boolean(default=True)
-    restricted = fields.Boolean(
-        string="Restreinte",
-        default=False
-    )
+    restricted = fields.Boolean(string="Restreinte", default=False)
 
-    property_type_id = fields.Many2one(
-        "estate.property.type"
-    )
-
-    tag_ids = fields.Many2many(
-        "estate.property.tag"
-    )
+    property_type_id = fields.Many2one("estate.property.type")
+    tag_ids = fields.Many2many("estate.property.tag")
 
     offer_ids = fields.One2many(
         "estate.property.offer",
         "property_id",
     )
 
-    buyer_id = fields.Many2one(
-        "res.partner",
-        copy=False
-    )
+    buyer_id = fields.Many2one("res.partner", copy=False)
 
     salesperson_id = fields.Many2one(
         "res.users",
@@ -102,9 +88,7 @@ class EstateProperty(models.Model):
     @api.depends("living_area", "garden_area")
     def _compute_total_area(self):
         for record in self:
-            record.total_area = (
-                record.living_area + record.garden_area
-            )
+            record.total_area = record.living_area + record.garden_area
 
     @api.depends("offer_ids.price")
     def _compute_best_price(self):
@@ -112,18 +96,10 @@ class EstateProperty(models.Model):
             prices = record.offer_ids.mapped("price")
             record.best_price = max(prices) if prices else 0
 
-    @api.onchange("garden")
-    def _onchange_garden(self):
-        if not self.garden:
-            self.garden_area = 0
-
     @api.constrains("expected_price", "selling_price")
     def _check_selling_price(self):
         for record in self:
-            if float_is_zero(
-                record.selling_price,
-                precision_digits=2
-            ):
+            if float_is_zero(record.selling_price, precision_digits=2):
                 continue
 
             if float_compare(
@@ -132,34 +108,23 @@ class EstateProperty(models.Model):
                 precision_digits=2,
             ) < 0:
                 raise ValidationError(
-                    "The selling price cannot be lower than "
-                    "90% of the expected price."
+                    "The selling price cannot be lower than 90% of the expected price."
                 )
 
     def action_sold(self):
         for record in self:
             if record.state == 'cancelled':
-                raise UserError(
-                    "A cancelled property cannot be sold."
-                )
-
+                raise UserError("A cancelled property cannot be sold.")
             record.state = 'sold'
-
         return True
 
     def action_cancel(self):
         for record in self:
             if record.state == 'sold':
-                raise UserError(
-                    "A sold property cannot be cancelled."
-                )
-
+                raise UserError("A sold property cannot be cancelled.")
             record.state = 'cancelled'
-
         return True
 
     @api.model
     def _cron_test(self):
-        _logger.info(
-            "SMART FLEET - La tâche automatique fonctionne !"
-        )
+        _logger.info("SMART FLEET - La tâche automatique fonctionne !")

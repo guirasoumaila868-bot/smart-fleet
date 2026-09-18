@@ -124,13 +124,27 @@ SUITE PREVU C2-C3 / J6-J7 : le véhicule poids lourd.
 
 JOUR 6
 Fait:
-Le module smart_fleet_base étend le modèle standard Odoo fleet.vehicle.
+Notre module ajoute des informations au modèle véhicule déjà fourni par Odoo.
 
 Les champs ajoutés sont :
-
- smart_categorie : tracteur, porteur ou remorque 
+smart_categorie : tracteur, porteur ou remorque 
 smart_nombre_essieux : nombre d'essieux 
 smart_ptac : poids total autorisé en charge 
 smart_ptra : poids total roulant autorisé 
 smart_date_mise_service : date de mise en service 
 smart_etat_service : en service, immobilisé ou réformé
+
+Deux contrôles ont été ajoutés :
+
+Le nombre d'essieux ne peut pas être négatif.
+Le PTRA doit être supérieur ou égal au PTAC.
+
+La règle sur le nombre d'essieux est protégée à deux niveaux :
+
+par une contrainte SQL ;
+par une contrainte Python avec `@api.constrains
+
+Bloqués 
+Le contrôle du nombre d'essieux nécessitait également une contrainte Python complémentaire à la contrainte SQL afin de bloquer clairement la saisie dans Odoo.
+
+SUITE PREVU C4-C5 / J8-J9 — L'attelage

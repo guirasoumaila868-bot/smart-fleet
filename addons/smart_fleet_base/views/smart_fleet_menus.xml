@@ -1,13 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <menuitem id="menu_smart_fleet_root"
-              name="SMART Fleet"
-              sequence="10"/>
+    <!-- 1. MENU RACINE : SMART Fleet -->
+    <menuitem
+        id="menu_smart_fleet_root"
+        name="SMART Fleet"
+        sequence="10"/>
 
-    <menuitem id="menu_smart_fleet_parc"
-              name="Parc"
-              parent="menu_smart_fleet_root"
-              sequence="10"/>
+
+    <!-- 2. MENU PARENT : Véhicules -->
+    <menuitem
+        id="menu_smart_fleet_vehicles"
+        name="Véhicules"
+        parent="menu_smart_fleet_root"
+        sequence="10"/>
+
+
+    <!-- 3. SOUS-MENU : Tous les véhicules -->
+    <menuitem
+        id="menu_smart_fleet_all_vehicles"
+        name="Tous les véhicules"
+        parent="menu_smart_fleet_vehicles"
+        action="action_smart_fleet_vehicle"
+        sequence="10"/>
+
+
+    <!-- 4. SOUS-MENU : Tracteurs -->
+    <menuitem
+        id="menu_smart_fleet_tracteurs"
+        name="Tracteurs"
+        parent="menu_smart_fleet_vehicles"
+        action="action_vehicle_tracteur"
+        sequence="20"/>
+
+
+    <!-- 5. SOUS-MENU : Porteurs -->
+    <menuitem
+        id="menu_smart_fleet_porteurs"
+        name="Porteurs"
+        parent="menu_smart_fleet_vehicles"
+        action="action_vehicle_porteur"
+        sequence="30"/>
+
+
+    <!-- 6. SOUS-MENU : Remorques -->
+    <menuitem
+        id="menu_smart_fleet_remorques"
+        name="Remorques"
+        parent="menu_smart_fleet_vehicles"
+        action="action_vehicle_remorque"
+        sequence="40"/>
+
+
+    <!-- 7. MENU : Attelages -->
+    <menuitem
+        id="menu_smart_fleet_coupling"
+        name="Attelages"
+        parent="menu_smart_fleet_root"
+        action="action_smart_fleet_coupling"
+        sequence="20"/>
 
 </odoo>

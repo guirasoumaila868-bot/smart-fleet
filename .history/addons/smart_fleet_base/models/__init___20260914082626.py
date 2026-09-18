@@ -1,1 +1,0 @@
-from . import smart_fleet_vehicle

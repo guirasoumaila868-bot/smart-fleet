@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 1. VUE LISTE -->
+    <record id="smart_fleet_coupling_view_list" model="ir.ui.view">
+        <field name="name">smart.fleet.coupling.list</field>
+        <field name="model">smart.fleet.coupling</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="not en_cours">
+                <field name="tracteur_id"/>
+                <field name="remorque_id"/>
+                <field name="date_debut"/>
+                <field name="date_fin"/>
+                <field name="motif_detelage" optional="hide"/>
+                <field name="en_cours" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- 2. VUE FORMULAIRE -->
+    <record id="smart_fleet_coupling_view_form" model="ir.ui.view">
+        <field name="name">smart.fleet.coupling.form</field>
+        <field name="model">smart.fleet.coupling</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_deteler" string="Dételer" type="object"
+                            class="btn-primary" invisible="not en_cours or not id"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Ensemble">
+                            <!-- Une fois enregistré, on ne change plus les véhicules : 
+                                 on dételle et on crée un nouvel attelage. -->
+                            <field name="tracteur_id" readonly="id"/>
+                            <field name="remorque_id" readonly="id"/>
+                        </group>
+                        <group string="Période">
+                            <field name="date_debut"/>
+                            <field name="date_fin" readonly="1"/>
+                            <field name="motif_detelage" invisible="not id"
+                                   readonly="not en_cours"/>
+                            <field name="en_cours" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- 3. VUE RECHERCHE / FILTRES -->
+    <record id="smart_fleet_coupling_view_search" model="ir.ui.view">
+        <field name="name">smart.fleet.coupling.search</field>
+        <field name="model">smart.fleet.coupling</field>
+        <field name="arch" type="xml">
+            <search>
+    <field name="tracteur_id"/>
+    <field name="remorque_id"/>
+
+    <filter name="filtre_en_cours"
+            string="En cours"
+            domain="[('en_cours', '=', True)]"/>
+
+    <filter name="filtre_historique"
+            string="Historique"
+            domain="[('en_cours', '=', False)]"/>
+
+    <filter name="groupby_tracteur"
+            string="Tracteur"
+            context="{'group_by': 'tracteur_id'}"/>
+</search>
+        </field>
+    </record>
+
+    <!-- 4. ACTION DE FENÊTRE -->
+    <record id="action_smart_fleet_coupling" model="ir.actions.act_window">
+        <field name="name">Attelages</field>
+        <field name="res_model">smart.fleet.coupling</field>
+        <field name="view_mode">list,form</field>
+        <!-- search_default_xxx : le filtre xxx est activé à l'ouverture -->
+        <field name="context">{}</field>
+    </record>
+</odoo>
